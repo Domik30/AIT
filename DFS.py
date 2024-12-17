@@ -1,25 +1,36 @@
 def is_valid_move(x, y, grid):
-    return 0 <= x < len(grid) and 0 <= y <len(grid[0]) and grid [x][y] == 0
+    return 0 <= x < len(grid) and 0 <= y < len(grid[0]) and grid[x][y] == 0
+
 
 def dfs(grid, start, goal):
     stack = [(start, 0)]
     visited = set()
+    visited_positions = []
 
     while stack:
-        (x, y), steps = stack.pop()
+        current, steps = stack.pop()
 
-        if (x, y) == goal:
+        if current in visited:
+            continue
+
+        visited.add(current)
+        visited_positions.append(current)
+
+        if current == goal:
+            print("Navštívená místa:")
+            for pos in visited_positions:
+                print(pos)
             return steps
 
-        if (x, y) not in visited:
-            visited.add((x, y))
+        x, y = current
+        for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
+            nx, ny = x + dx, y + dy
+            if is_valid_move(nx, ny, grid) and (nx, ny) not in visited:
+                stack.append(((nx, ny), steps + 1))
 
-            for dx, dy in [(0, 1), (1, 0), (0, -1), (-1, 0)]:
-                nx, ny = x + dx, y +dy
-
-                if is_valid_move(nx, ny, grid) and (nx, ny) not in visited:
-                    stack.append(((nx, ny), steps + 1))
-
+    print("Navštívená místa:")
+    for pos in visited_positions:
+        print(pos)
     return -1
 
 grid = [
@@ -31,10 +42,10 @@ grid = [
 ]
 
 start = (4, 0)
-goal = (2,4)
+goal = (2, 4)
 
 steps = dfs(grid, start, goal)
 if steps != -1:
-    print("počet krtoků", steps)
+    print("Počet kroků:", steps)
 else:
-    print("Cesta neexistuje")
+    print("Cesta neexistuje.")

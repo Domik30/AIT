@@ -5,11 +5,16 @@ def bfs(grid, start, goal):
     queue = [(start, 0)]
     visited = set()
     visited.add(start)
+    visited_positions = []
 
     while queue:
         current, steps = queue.pop(0)
+        visited_positions.append(current)
 
         if current == goal:
+            print("Navštívená místa:")
+            for pos in visited_positions:
+                print(pos)
             return steps
 
         x, y = current
@@ -20,6 +25,9 @@ def bfs(grid, start, goal):
                 visited.add((nx, ny))
                 queue.append(((nx, ny), steps + 1))
 
+    print("Navštívená místa:")
+    for pos in visited_positions:
+        print(pos)
     return -1
 
 grid = [
@@ -35,6 +43,6 @@ goal = (2, 4)
 
 steps = bfs(grid, start, goal)
 if steps != -1:
-    print("počet krtoků", steps)
+    print("Počet kroků:", steps)
 else:
     print("Cesta neexistuje.")
