@@ -1,9 +1,30 @@
+def is_connected(graph):
+    visited = set()
+
+    def dfs(node):
+        if node not in visited:
+            visited.add(node)
+            for neighbor in graph[node]:
+                dfs(neighbor)
+
+    start_node = next(iter(graph))
+    dfs(start_node)
+
+    return len(visited) == len(graph)
+
+
 def is_eulerian(graph):
+    if not is_connected(graph):
+        return "Graph is not Eulerian (it is not connected)."
+
     odd_degree_count = 0
+    print("Degrees of each node:")
     for node in graph:
         degree = len(graph[node])
+        print("Node", node, ": Degree", degree)
         if degree % 2 != 0:
             odd_degree_count += 1
+    print("Total nodes with odd degree:", odd_degree_count)
 
     if odd_degree_count == 0:
         return "Graph has an Eulerian cycle (can be traversed in a closed loop)."
@@ -17,6 +38,7 @@ def build_graph():
     nodes = input("Enter nodes separated by spaces (e.g., 'A B C D'): ").split()
     graph = dict((node, []) for node in nodes)
     print("Nodes added:", " ".join(nodes))
+    print("Now, enter edges one by one in the format 'A-B' (or just press Enter to finish):")
     while True:
         edge = input("Edge: ").strip()
         if not edge:
